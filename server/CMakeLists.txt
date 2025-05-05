@@ -2,6 +2,7 @@ add_executable(server
     main.cpp
     src/Acceptor.cpp
     src/Acceptor_Handler.cpp
+    src/Thread_Pool.cpp
 )
 
 target_include_directories(server
