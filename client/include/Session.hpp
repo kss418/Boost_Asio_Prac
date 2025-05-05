@@ -10,12 +10,13 @@ public:
         unsigned short port
     );
 
-    boost::asio::ip::tcp::socket socket;
-    boost::asio::ip::tcp::endpoint endpoint;
-
     void Connect();
     void Write(const std::string& msg);
     void Read();
+
+private:
+    boost::asio::ip::tcp::socket socket;
+    boost::asio::ip::tcp::endpoint endpoint;
 
     void Handle_Connect(const boost::system::error_code& ec);
     void Handle_Write(const boost::system::error_code& ec, std::size_t bytes_transffered);
