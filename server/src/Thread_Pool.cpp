@@ -32,18 +32,6 @@ void Thread_Pool::Work(){
     }
 }
 
-void Thread_Pool::Enqueue_Work(std::function<void()> work){
-    if(!run){
-        throw std::runtime_error("Thread Pool 종료");
-    }
-
-    {
-        std::lock_guard<std::mutex> lock(work_lock);
-        work_q.push(std::move(work));
-    }
-    work_cv.notify_one();
-}
-
 Thread_Pool::~Thread_Pool(){
     run = 0;
     work_cv.notify_all();

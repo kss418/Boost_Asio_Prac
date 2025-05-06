@@ -11,8 +11,11 @@ class Thread_Pool{
 public:
     Thread_Pool(std::size_t capacity);
     ~Thread_Pool();
-    void Enqueue_Work(std::function<void()> work);
-    
+    template <typename F, typename... Args>
+    std::future<typename std::result_of<F(Args...)>::type> Enqueue_Work(
+        F&& f, Args&&... args
+    );
+
 private:
     size_t capacity;
     std::vector<std::thread> worker_thread;
@@ -24,3 +27,27 @@ private:
     void Work();
 };
 
+template <typename F, typename... Args>
+std::future<typename std::result_of<F(Args...)>::type> Thread_Pool::Enqueue_Work(
+    F&& f, Args&&... args
+){
+    if(!run){
+        throw std::runtime_error("Thread Pool 종료");
+    }
+
+    using return_type = typename std::result_of<F(Args...)>::type;
+    auto work = std::make_shared<std::packaged_task<return_type()>>(
+        std::bind(std::forward<F>(f), std::forward<Args>(args)...)
+    );
+
+    std::future<return_type> ret = work->get_future();
+    {
+        std::lock_guard<std::mutex> lock(work_lock);
+        work_q.emplace([work](){
+            (*work)();
+        });
+    }
+    work_cv.notify_one();
+
+    return ret;
+}
