@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(Boost_Prac)
-set(CMAKE_PREFIX_PATH "/home/kss418/.vscode/Boost_Asio_Prac/vcpkg/installed/x64-linux" CACHE STRING "")
+set(CMAKE_PREFIX_PATH "{CMAKE_SOURCE_DIR}/vcpkg/installed/x64-linux" CACHE STRING "")
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
