@@ -4,17 +4,13 @@
 #include "Thread_Pool.hpp"
 
 const int buf_size = 1000;
-void work(int id){
-    printf("%d start \n", id);
-}
 
 int main(){
-    Thread_Pool Pool(3);
-    for(int i = 0;i < 10;++i){
-        Pool.Enqueue_Work([i](){
-            work(i);
-        });
-    }
+    Thread_Pool Pool(4);
+    boost::asio::io_context io_object;
+    Acceptor acceptor(io_object, 3333);
+    acceptor.Accept();
+    
 
     return 0;
 }

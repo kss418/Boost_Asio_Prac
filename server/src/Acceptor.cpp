@@ -11,10 +11,10 @@ Acceptor::Acceptor(
     endpoint(boost::asio::ip::address_v4::any(), port),
     acceptor(io_object, endpoint),
     buf(1024) { 
+        acceptor.listen();
 }
 
 void Acceptor::Accept(){
-    acceptor.listen();
     acceptor.async_accept(socket, boost::bind(
         &Acceptor::Handle_Aceept, 
         this, 
