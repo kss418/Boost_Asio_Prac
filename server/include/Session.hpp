@@ -1,10 +1,21 @@
 #pragma once
 #include <boost/asio.hpp>
+#include <boost/bind/bind.hpp>
 #include <memory>
+#include <vector>
+#include <iostream>
+#include <syncstream>
 
 class Session{
 public:
     Session(std::shared_ptr<boost::asio::ip::tcp::socket> socket);
+    void Read();
+    void Handle_Read(
+        const boost::system::error_code& ec,
+        std::size_t bytes_transferred
+    );
+
 private:
     std::shared_ptr<boost::asio::ip::tcp::socket> socket;
+    std::vector<char> buf;
 };

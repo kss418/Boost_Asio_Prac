@@ -6,6 +6,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <boost/bind/bind.hpp>
 
 class Thread_Pool{
 public:
