@@ -2,6 +2,7 @@ add_executable(server
     main.cpp
     src/Acceptor.cpp
     src/Session.cpp
+    src/Session_Handler.cpp
     src/Thread_Pool.cpp
 )
 

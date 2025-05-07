@@ -1,6 +1,4 @@
 #include "Session.hpp"
-#include <iostream>
-#include <syncstream>
 #include <boost/bind/bind.hpp>
 
 Session::Session(int32_t id, std::shared_ptr<boost::asio::ip::tcp::socket> socket)
@@ -20,24 +18,10 @@ void Session::Read(){
     );
 }
 
-void Session::Handle_Read(
-    const boost::system::error_code& ec,
-    std::size_t bytes_transferred
-){
-    if(!ec){
-        std::osyncstream out(std::cout);
-        out << bytes_transferred << std::endl;
-        Read();
-    }
-    else if(ec == boost::asio::error::eof || ec == boost::asio::error::connection_reset){
-        Handle_Close(shared_from_this());
-    }
-    else{
-        std::osyncstream out(std::cout);
-        out << "Error Message : " << ec.what() << std::endl;
-    }
-}
-
 void Session::Set_Handle_Close(std::function<void(std::shared_ptr<Session>)> f){
     Handle_Close = std::move(f);
+}
+
+void Session::Write(const std::string& msg){
+
 }

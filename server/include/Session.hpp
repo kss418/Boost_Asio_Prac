@@ -10,12 +10,18 @@ public:
     int32_t id;
 
     void Read();
+    void Set_Handle_Close(std::function<void(std::shared_ptr<Session>)> f);
+    void Write(const std::string& msg);
+
     void Handle_Read(
         const boost::system::error_code& ec,
         std::size_t bytes_transferred
     );
-    void Set_Handle_Close(std::function<void(std::shared_ptr<Session>)> f);
-
+    void Handle_Write(
+        const boost::system::error_code& ec,
+        std::size_t bytes_transferred
+    );
+    
 private:
     std::shared_ptr<boost::asio::ip::tcp::socket> socket;
     std::vector<char> buf;
