@@ -1,6 +1,7 @@
 #include "Acceptor.hpp"
 #include <iostream>
 #include <boost/bind/bind.hpp>
+#include <syncstream>
 
 Acceptor::Acceptor(
     boost::asio::io_context& io_object,
@@ -29,14 +30,31 @@ void Acceptor::Handle_Aceept(
     std::shared_ptr<boost::asio::ip::tcp::socket> socket
 ){
     if(!ec){
-        std::cout << "연결 완료" << std::endl;
-        auto session = std::make_shared<Session>(std::move(socket));
-        session_list.emplace_back(session);
+        ++count;
+        auto session = std::make_shared<Session>(count, std::move(socket));
+        session_map[session->id] = session;
+
+        std::osyncstream out(std::cout);
+        out << "연결 완료, id = " << session->id << std::endl;
+        out << "현재 접속 " << session_map.size() << std::endl;
+
+        session->Set_Handle_Close(
+            [this](std::shared_ptr<Session> s){
+                auto it = session_map.find(s->id);
+                if(it != session_map.end()) session_map.erase(it);
+
+                std::osyncstream out(std::cout);
+                out << "연결 종료, id = " << s->id << std::endl;
+                out << "현재 접속 " << session_map.size() << std::endl;
+            }
+        );
+
         session->Read();
         Accept();
     }
     else{
-        std::cout << "Error Message : " << ec.what() << std::endl;
+        std::osyncstream out(std::cout);
+        out << "Error Message : " << ec.what() << std::endl;
     }
 }
 

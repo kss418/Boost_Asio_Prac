@@ -1,7 +1,7 @@
 #pragma once
 #include "Session.hpp"
 #include <boost/asio.hpp>
-#include <vector>
+#include <unordered_map>
 #include <memory>
 
 class Acceptor{
@@ -16,7 +16,8 @@ private:
     boost::asio::ip::tcp::endpoint endpoint;
     boost::asio::io_context& io_object;
     boost::asio::ip::tcp::acceptor acceptor;
-    std::vector <std::shared_ptr<Session>> session_list;
+    std::unordered_map <int32_t, std::shared_ptr<Session>> session_map;
+    int32_t count = 0;
 
     void Handle_Aceept(
         const boost::system::error_code& ec,
