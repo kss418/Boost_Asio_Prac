@@ -11,14 +11,13 @@ public:
     );
 
     void Accept();
-    void Read();
-
 private:
-    std::vector <char> buf;
-    boost::asio::ip::tcp::socket socket;
     boost::asio::ip::tcp::endpoint endpoint;
+    boost::asio::io_context& io_object;
     boost::asio::ip::tcp::acceptor acceptor;
 
-    void Handle_Aceept(const boost::system::error_code& ec);
-    void Handle_Read(const boost::system::error_code& ec, std::size_t bytes_transferred);
+    void Handle_Aceept(
+        const boost::system::error_code& ec,
+        std::shared_ptr<boost::asio::ip::tcp::socket> socket
+    );
 };
