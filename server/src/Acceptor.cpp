@@ -1,4 +1,6 @@
 #include "Acceptor.hpp"
+#include <iostream>
+#include <boost/bind/bind.hpp>
 
 Acceptor::Acceptor(
     boost::asio::io_context& io_object,

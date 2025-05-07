@@ -2,9 +2,6 @@
 #include "Session.hpp"
 #include <boost/asio.hpp>
 #include <vector>
-#include <mutex>
-#include <boost/bind/bind.hpp>
-#include <iostream>
 #include <memory>
 
 class Acceptor{

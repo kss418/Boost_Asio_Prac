@@ -1,4 +1,5 @@
 #include "../include/Thread_Pool.hpp"
+#include <boost/bind/bind.hpp>
 
 Thread_Pool::Thread_Pool(std::size_t capacity)
     : capacity(capacity) {

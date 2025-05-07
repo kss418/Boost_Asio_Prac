@@ -1,10 +1,7 @@
 #pragma once
 #include <boost/asio.hpp>
-#include <boost/bind/bind.hpp>
 #include <memory>
 #include <vector>
-#include <iostream>
-#include <syncstream>
 
 class Session : public std::enable_shared_from_this<Session> {
 public:

@@ -1,4 +1,7 @@
 #include "Session.hpp"
+#include <iostream>
+#include <syncstream>
+#include <boost/bind/bind.hpp>
 
 Session::Session(std::shared_ptr<boost::asio::ip::tcp::socket> socket)
     : socket(std::move(socket)), buf(1024){
