@@ -9,6 +9,7 @@ void Session::Handle_Read(
     if(!ec){
         std::osyncstream out(std::cout);
         out << bytes_transferred << std::endl;
+        Write(std::string(buf.begin(), buf.end()));
         Read();
     }
     else if(ec == boost::asio::error::eof || ec == boost::asio::error::connection_reset){
@@ -24,5 +25,15 @@ void Session::Handle_Write(
     const boost::system::error_code& ec,
     std::size_t bytes_transferred
 ){
-
+    if(!ec){
+        std::osyncstream out(std::cout);
+        out << bytes_transferred << std::endl;
+    }
+    else if(ec == boost::asio::error::eof || ec == boost::asio::error::connection_reset){
+        Handle_Close(shared_from_this());
+    }
+    else{
+        std::osyncstream out(std::cout);
+        out << "Error Message : " << ec.what() << std::endl;
+    }
 }

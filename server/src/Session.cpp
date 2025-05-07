@@ -23,5 +23,15 @@ void Session::Set_Handle_Close(std::function<void(std::shared_ptr<Session>)> f){
 }
 
 void Session::Write(const std::string& msg){
-
+    auto self = shared_from_this();
+    boost::asio::async_write(
+        *socket,
+        boost::asio::buffer(msg),
+        boost::bind(
+            &Session::Handle_Write,
+            self,
+            boost::asio::placeholders::error,
+            boost::asio::placeholders::bytes_transferred
+        )
+    );
 }
