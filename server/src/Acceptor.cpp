@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include "Acceptor.hpp"
+#include "Session.hpp"
 
 Acceptor::Acceptor(
     boost::asio::io_context& io_object,
@@ -32,6 +33,7 @@ void Acceptor::Handle_Aceept(
 ){
     if(!ec){
         std::cout << "연결 완료" << std::endl;
+        Session session(std::move(socket));
         Accept();
     }
     else{
