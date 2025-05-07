@@ -6,7 +6,7 @@
 #include <iostream>
 #include <syncstream>
 
-class Session{
+class Session : public std::enable_shared_from_this<Session> {
 public:
     Session(std::shared_ptr<boost::asio::ip::tcp::socket> socket);
     void Read();

@@ -5,11 +5,12 @@ Session::Session(std::shared_ptr<boost::asio::ip::tcp::socket> socket)
 }
 
 void Session::Read(){
+    auto self = shared_from_this();
     socket->async_read_some(
         boost::asio::buffer(buf),
         boost::bind(
             &Session::Handle_Read,
-            this,
+            self,
             boost::asio::placeholders::error,
             boost::asio::placeholders::bytes_transferred
         )
@@ -23,6 +24,7 @@ void Session::Handle_Read(
     if(!ec){
         std::osyncstream out(std::cout);
         out << bytes_transferred << std::endl;
+        Read();
     }
     else{
         std::osyncstream out(std::cout);
