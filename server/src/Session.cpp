@@ -1,5 +1,6 @@
 #include "Session.hpp"
 #include <boost/bind/bind.hpp>
+#include <iostream>
 
 Session::Session(int32_t id, std::shared_ptr<boost::asio::ip::tcp::socket> socket)
     : id(id), socket(std::move(socket)), buf(1024){
