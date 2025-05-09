@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
+#include <vector>
 
 class Session{
 public:
@@ -17,7 +18,9 @@ public:
 private:
     boost::asio::ip::tcp::socket socket;
     boost::asio::ip::tcp::endpoint endpoint;
+    std::vector <char> buf;
 
     void Handle_Connect(const boost::system::error_code& ec);
     void Handle_Write(const boost::system::error_code& ec, std::size_t bytes_transffered);
+    void Handle_Read(const boost::system::error_code& ec, std::size_t bytes_transffered);
 };
