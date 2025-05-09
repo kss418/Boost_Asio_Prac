@@ -17,6 +17,7 @@ void Session::Handle_Write(const boost::system::error_code& ec, std::size_t byte
     if(!ec){
         std::osyncstream out(std::cout);
         out << "Send " << bytes_transffered << " Bytes" << std::endl;
+        Read();
     }
     else{
         std::osyncstream out(std::cout);
@@ -27,7 +28,7 @@ void Session::Handle_Write(const boost::system::error_code& ec, std::size_t byte
 void Session::Handle_Read(const boost::system::error_code& ec, std::size_t bytes_transffered){
     if(!ec){
         std::osyncstream out(std::cout);
-        out << "Receive " << bytes_transffered << " Bytes" << std::endl;
+        out << std::string(buf.data(), bytes_transffered) << std::endl;
         Read();
     }
     else{
