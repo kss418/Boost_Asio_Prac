@@ -3,7 +3,6 @@ add_executable(server
     src/Acceptor.cpp
     src/Session.cpp
     src/Session_Handler.cpp
-    src/Thread_Pool.cpp
 )
 
 target_include_directories(server
