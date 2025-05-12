@@ -3,6 +3,7 @@
 #include <boost/asio.hpp>
 #include <unordered_map>
 #include <memory>
+#include <mutex>
 
 class Acceptor{
 public:
@@ -17,7 +18,8 @@ private:
     boost::asio::io_context& io_object;
     boost::asio::ip::tcp::acceptor acceptor;
     std::unordered_map <int32_t, std::shared_ptr<Session>> session_map;
-    int32_t count = 0;
+    std::mutex session_map_mutex;
+    std::atomic <int32_t> count = 0;
 
     void Handle_Aceept(
         const boost::system::error_code& ec,
