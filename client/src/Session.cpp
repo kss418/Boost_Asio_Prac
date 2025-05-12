@@ -14,32 +14,27 @@ void Session::Write(const std::string& msg){
     boost::asio::async_write(
         socket,
         boost::asio::buffer(msg),
-        boost::bind(&Session::Handle_Write,
-            this,
-            boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred
-        )
+        [this](const boost::system::error_code& ec, std::size_t bytes_transferred){
+            Handle_Write(ec, bytes_transferred);
+        }
     );
 }
 
 void Session::Connect(){
-    socket.async_connect(endpoint,
-        boost::bind(&Session::Handle_Connect,
-            this,
-            boost::asio::placeholders::error
-        )
+    socket.async_connect(
+        endpoint,
+        [this](const boost::system::error_code& ec){
+            Handle_Connect(ec);
+        }
     );
 }
 
 void Session::Read(){
     socket.async_read_some(
         boost::asio::buffer(buf),
-        boost::bind(
-            &Session::Handle_Read,
-            this,
-            boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred
-        )
+        [this](const boost::system::error_code& ec, std::size_t bytes_transferred){
+            Handle_Read(ec, bytes_transferred);
+        }
     );
 }
 
