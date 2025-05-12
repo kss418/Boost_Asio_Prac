@@ -15,13 +15,11 @@ Acceptor::Acceptor(
 
 void Acceptor::Accept(){
     auto socket = std::make_shared<boost::asio::ip::tcp::socket>(io_object);
-    acceptor.async_accept(*socket, 
-        boost::bind(
-            &Acceptor::Handle_Aceept, 
-            this, 
-            boost::asio::placeholders::error,
-            socket
-        )
+    acceptor.async_accept(
+        *socket, 
+        [this, socket](const boost::system::error_code& ec){
+            this->Handle_Aceept(ec, socket);
+        }
     );
 }
 
