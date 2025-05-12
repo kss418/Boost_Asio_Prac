@@ -10,12 +10,9 @@ void Session::Read(){
     auto self = shared_from_this();
     socket->async_read_some(
         boost::asio::buffer(buf),
-        boost::bind(
-            &Session::Handle_Read,
-            self,
-            boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred
-        )
+        [self](const boost::system::error_code& ec, std::size_t bytes_transffered){
+            self->Handle_Read(ec, bytes_transffered);
+        }
     );
 }
 
@@ -28,11 +25,8 @@ void Session::Write(const std::string& msg){
     boost::asio::async_write(
         *socket,
         boost::asio::buffer(msg),
-        boost::bind(
-            &Session::Handle_Write,
-            self,
-            boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred
-        )
+        [self](const boost::system::error_code& ec, std::size_t bytes_transffered){
+            self->Handle_Write(ec, bytes_transffered);
+        }
     );
 }
