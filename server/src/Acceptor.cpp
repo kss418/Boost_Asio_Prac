@@ -30,7 +30,11 @@ void Acceptor::Handle_Aceept(
     if(!ec){
         ++count;
         auto session = std::make_shared<Session>(count, std::move(socket));
-        session_map[session->id] = session;
+
+        {
+            std::lock_guard<std::mutex> lock(session_map_mutex);
+            session_map[session->id] = session;
+        }
 
         std::osyncstream out(std::cout);
         out << "연결 완료, id = " << session->id << std::endl;
@@ -38,12 +42,17 @@ void Acceptor::Handle_Aceept(
 
         session->Set_Handle_Close(
             [this](std::shared_ptr<Session> s){
-                auto it = session_map.find(s->id);
-                if(it != session_map.end()) session_map.erase(it);
+                std::size_t map_size;
+                {
+                    std::lock_guard<std::mutex> lock(session_map_mutex);
+                    auto it = session_map.find(s->id);
+                    if(it != session_map.end()) session_map.erase(it);
+                    map_size = session_map.size();
+                }       
 
                 std::osyncstream out(std::cout);
                 out << "연결 종료, id = " << s->id << std::endl;
-                out << "현재 접속 " << session_map.size() << std::endl;
+                out << "현재 접속 " << map_size << std::endl;
             }
         );
 
