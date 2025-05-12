@@ -1,7 +1,6 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include "Acceptor.hpp"
-#include "Thread_Pool.hpp"
 
 const int buf_size = 1000;
 
